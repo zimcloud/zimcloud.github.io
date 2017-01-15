@@ -3,9 +3,26 @@
 <head lang="en">
     <meta charset="UTF-8">
     <title>zim Demo</title>
-    <script data-main="scripts/main" src="scripts/require.js"></script>
+    <link rel=”icon” href=”/favicon.ico” mce_href=”/favicon.ico” type=”image/x-icon”>
+    <link rel="stylesheet" href="/static/vendor/bootstrap/bootstrap.min.css">
+    <link rel="stylesheet" href="/static/css/demo.css">
 </head>
 <body>
-    <h1>zim Demo</h1>
+    <div id="container" class="container">
+        <div id="log"></div>
+        <form id="form" action="" class="form-inline">
+            <div id="controllers">
+                <div id="controller-text">
+                    <input type="text" id="msg" class="form-control" size="60" />
+                </div>
+                <div id="controller-submit">
+                    <button type="submit" class="btn btn-success">Send</button>
+                </div>
+            </div>
+        </form>
+    </div>
+    <script type="text/javascript" src="static/vendor/jquery/jquery.min.js"></script>
+    <script type="text/javascript" src="static/js/zim.js"></script>
+    <script type="text/javascript" src="static/js/demo.js"></script>
 </body>
 </html>
