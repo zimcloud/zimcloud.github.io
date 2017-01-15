@@ -1,6 +1,6 @@
 $(function() {
   var sdk
-  var url = "wss://demo.zimcloud.cn:8870/ws"
+  var url = "wss://demo.zimcloud.cn/ws"
   var msg = $("#msg")
   var log = $("#log")
 
