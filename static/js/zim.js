@@ -191,9 +191,13 @@
                 if (_self.debug || zim.debugAll) {
                     console.debug('zim', 'onmessage', _self.url, event.data);
                 }
-                var e = generateEvent('message');
-                e.data = event.data;
-                eventTarget.dispatchEvent(e);
+                var cmd = _self.unmarshal(event.data);
+                if (cmd.payload != 'undefined' && cmd.payload.length > 0) {
+                    var payload = eval("("+cmd.payload+")");
+                    var e = generateEvent('message');
+                    e.data = payload;
+                    eventTarget.dispatchEvent(e);
+                }
             };
             ws.onerror = function(event) {
                 if (_self.debug || zim.debugAll) {
@@ -291,6 +295,63 @@
             }
             return JSON.stringify(obj);
         };
+        
+        /**
+         * 解码
+         */
+        this.unmarshal = function(data) {
+            if (_self.debug || zim.debugAll) {
+                console.debug('zim', 'unmarshal', "_self.zimProtocol: ", _self.zimProtocol);
+            }
+            var ret;
+            switch (_self.zimProtocol) {
+                case "plaintext":
+                    ret = unmarshalPlaintext(data);
+                    break;
+                case "json":
+                    ret = unmarshalJSON(data);
+                    break;
+                default:
+                    throw 'INVALID_STATE_ERR : unmarshal unknown protocol: ' + _self.zimProtocol;
+            }
+            if (_self.debug || zim.debugAll) {
+                console.debug('zim', 'unmarshal', "ret: ", ret);
+            }
+            return ret;
+        };
+        function unmarshalPlaintext(data) {
+            var lines = data.split('\n');
+            if (lines.length < 5) {
+                if (_self.debug || zim.debugAll) {
+                    console.debug('zim', 'unmarshalPlaintext', "only ", lines.length , " lines");
+                }
+                return {}
+            }
+            var ret = {
+                version: lines[0],
+                appid: lines[1],
+                name: lines[2],
+                payload: ""
+            }
+            if (lines[3].length > 0) {
+                ret.data = eval("("+lines[3]+")");
+            }
+            for (var i = 4; i < lines.length; i++) {
+                if (lines[i].length > 0) {
+                    if (ret.payload.length > 0) {
+                        ret.payload = ret.payload + "\n" + lines[i];
+                    } else {
+                        ret.payload = lines[i];
+                    }
+                }
+            }
+            return ret;
+        };
+        function unmarshalJSON(data) {
+            var ret = eval("("+data+")");
+            // Todo: base64 payload decode
+            return ret;
+        }
     }
 
     /**
