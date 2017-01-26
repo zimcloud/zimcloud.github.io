@@ -8,8 +8,8 @@ $(function() {
   if ('https:' == document.location.protocol) {
     url = "wss://demo.zimcloud.cn/ws";
   } else {
-    url = "ws://127.0.0.1:8870/ws";
-    // url = "ws://demo.zimcloud.cn/ws";
+    // url = "ws://127.0.0.1:8870/ws";
+    url = "ws://demo.zimcloud.cn/ws";
   }
 
   function appendLog(msg) {
