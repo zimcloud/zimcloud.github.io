@@ -222,7 +222,7 @@
                 if (_self.debug || zim.debugAll) {
                     console.debug('zim', 'send', _self.url, data);
                 }
-                return ws.send(this.marshal("msg", {userid: "1"}, data));
+                return ws.send(this.marshal("msg", {userid: _self.userID}, data));
             } else {
                 throw 'INVALID_STATE_ERR : Pausing to reconnect websocket';
             }
@@ -282,7 +282,7 @@
             if (typeof data !== 'undefined') {
                 dataString = JSON.stringify(data);
             }
-            return "t1\n" + appID + "\n" + cmd +"\n" + dataString + "\n" + payload
+            return "t1\n" + appID + "\n" + cmd +"\n" + dataString + "\n" + payload + "\n"
         };
 
         function marshalJSON(appID, cmd, data, payload) {
@@ -331,19 +331,10 @@
                 version: lines[0],
                 appid: lines[1],
                 name: lines[2],
-                payload: ""
+                payload: lines[4],
             }
             if (lines[3].length > 0) {
                 ret.data = eval("("+lines[3]+")");
-            }
-            for (var i = 4; i < lines.length; i++) {
-                if (lines[i].length > 0) {
-                    if (ret.payload.length > 0) {
-                        ret.payload = ret.payload + "\n" + lines[i];
-                    } else {
-                        ret.payload = lines[i];
-                    }
-                }
             }
             return ret;
         };
