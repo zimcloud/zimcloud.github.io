@@ -1,5 +1,5 @@
 /**
- * Copyright © 2016 Zhang Peihao <zhangpeihao@gmail.com>
+ * Copyright © 2016-2017 Zhang Peihao <zhangpeihao@gmail.com>
  */
 (function (global, factory) {
      if (typeof define === 'function' && define.amd) {
@@ -150,12 +150,13 @@
                 e.isReconnect = reconnectAttempt;
                 reconnectAttempt = false;
                 eventTarget.dispatchEvent(e);
+                
                 ws.send(_self.marshal("login", 
                     {
                         userid: _self.userID,
                         deviceid: _self.deviceID,
-                        timestamp: 0,
-                        token: ""
+                        timestamp: _self.timestamp,
+                        token: _self.token
                     }, 
                     ""));
             };
